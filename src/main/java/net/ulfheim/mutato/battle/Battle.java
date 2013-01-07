@@ -2,6 +2,7 @@ package net.ulfheim.mutato.battle;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Random;
 import net.ulfheim.mutato.Compiler;
 import net.ulfheim.mutato.Muto;
 import net.ulfheim.mutato.MutoMill;
@@ -30,24 +31,9 @@ public class Battle
 
         try
         {
-            MutoMill mill1 = new MutoMillImpl(256);
-            MutoMill mill2 = new MutoMillImpl(256);
-
-            String code1 = Compiler.readProgram(args[0]);
-            String code2 = Compiler.readProgram(args[1]);
-
-            int offset1 = 0;
-            int offset2 = 128;
-
-            Compiler.translateProgram(mill1, code1, offset1);
-            Compiler.translateProgram(mill2, code2, offset2);
-
-            Muto muto1 = new MutoImpl(mill1, mill2, offset1, code1.length());
-            Muto muto2 = new MutoImpl(mill2, mill1, offset2, code2.length());
-
             int rounds = Integer.valueOf(System.getProperty("rounds", "1000000"));
 
-            BattleResult result = fight(muto1, muto2, rounds);
+            BattleResult result = fight(args[0], args[1], rounds);
             switch (result.winner)
             {
                 case 1:
@@ -78,6 +64,28 @@ public class Battle
             logger.fatal("unable to read source file", ex);
             System.exit(127);
         }
+    }
+
+    public static BattleResult fight(String file1, String file2, int rounds)
+            throws FileNotFoundException, IOException, CompilerException
+    {
+        MutoMill mill1 = new MutoMillImpl(256);
+        MutoMill mill2 = new MutoMillImpl(256);
+
+        String code1 = Compiler.readProgram(file1);
+        String code2 = Compiler.readProgram(file2);
+
+        Random rand = new Random();
+        int offset1 = rand.nextInt(mill1.size());
+        int offset2 = rand.nextInt(mill2.size());
+
+        Compiler.translateProgram(mill1, code1, offset1);
+        Compiler.translateProgram(mill2, code2, offset2);
+
+        Muto muto1 = new MutoImpl(mill1, mill2, offset1, code1.length());
+        Muto muto2 = new MutoImpl(mill2, mill1, offset2, code2.length());
+
+        return fight(muto1, muto2, rounds);
     }
 
     private static BattleResult fight(Muto muto1, Muto muto2, int rounds)

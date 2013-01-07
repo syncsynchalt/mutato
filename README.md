@@ -62,5 +62,5 @@ The following opcodes are understood by the muto machine:
 *   `v RWND (6)`
     Multiply the current item in the muto's data mill by sixteen, and decrement the data pointer by that value.
 
-*   `x DIE  (7)`
+*   `x DIE (7) `
     Forfeit the battle.

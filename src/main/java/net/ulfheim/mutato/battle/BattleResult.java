@@ -8,7 +8,7 @@ package net.ulfheim.mutato.battle;
  *
  * @author mdriscoll
  */
-class BattleResult
+public class BattleResult
 {
     public final int winner;
     public final int rounds;
