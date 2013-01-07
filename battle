@@ -1,0 +1,4 @@
+#!/bin/sh
+
+JAR=$(ls target/mutato-*-jar-with-dependencies.jar | tail -n 1)
+java -classpath "${JAR}" net.ulfheim.mutato.battle.Battle "$@"
