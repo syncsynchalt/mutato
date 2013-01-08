@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2012 PAX8
- */
-
 package net.ulfheim.mutato;
 
 /**
@@ -35,6 +31,23 @@ public final class MutoCode
             case 'x': return DIE;
             default:
                 throw new IllegalArgumentException("Unrecognized mutocode " + c);
+        }
+    }
+
+    public static char codeChar(int code)
+    {
+        switch (code)
+        {
+            case 0: return '.';
+            case 1: return '+';
+            case 2: return '-';
+            case 3: return '>';
+            case 4: return '<';
+            case 5: return '^';
+            case 6: return 'v';
+            case 7: return 'x';
+            default:
+                throw new IllegalArgumentException("Unrecognized mutocodepoint " + code);
         }
     }
 }

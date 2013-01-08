@@ -33,7 +33,9 @@ public class Battle
         {
             int rounds = Integer.valueOf(System.getProperty("rounds", "1000000"));
 
-            BattleResult result = fight(args[0], args[1], rounds);
+            String code1 = Compiler.readProgram(args[0]);
+            String code2 = Compiler.readProgram(args[1]);
+            BattleResult result = fight(code1, code2, rounds);
             switch (result.winner)
             {
                 case 1:
@@ -66,14 +68,11 @@ public class Battle
         }
     }
 
-    public static BattleResult fight(String file1, String file2, int rounds)
-            throws FileNotFoundException, IOException, CompilerException
+    public static BattleResult fight(String code1, String code2, int rounds)
+            throws CompilerException
     {
         MutoMill mill1 = new MutoMillImpl(256);
         MutoMill mill2 = new MutoMillImpl(256);
-
-        String code1 = Compiler.readProgram(file1);
-        String code2 = Compiler.readProgram(file2);
 
         Random rand = new Random();
         int offset1 = rand.nextInt(mill1.size());

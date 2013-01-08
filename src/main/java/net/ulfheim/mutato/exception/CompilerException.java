@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2012 PAX8
- */
-
 package net.ulfheim.mutato.exception;
 
 /**
