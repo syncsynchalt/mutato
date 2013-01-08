@@ -8,11 +8,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import net.ulfheim.mutato.battle.Battle;
 import net.ulfheim.mutato.battle.BattleResult;
 import net.ulfheim.mutato.exception.CompilerException;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -20,17 +23,18 @@ import net.ulfheim.mutato.exception.CompilerException;
  */
 public class Hill
 {
+    private static final Logger logger = Logger.getLogger(Hill.class.getName());
+
     public static void main(String[] args)
     {
         if (args.length != 2)
         {
-            System.err.println("Usage: hill [dir] [rounds]");
+            System.err.println("Usage: hill [program dir] [fights per program]");
             System.exit(1);
         }
 
-
         String dir = args[0];
-        int rounds = Integer.valueOf(args[1]);
+        int fightsPerProgram = Integer.valueOf(args[1]);
 
         File dirFile = new File(dir);
         String[] files = dirFile.list();
@@ -44,28 +48,61 @@ public class Hill
                 progs.add(new HillFighter(code, file));
             }
 
-            Random random = new Random();
-            for (int i = 0; i < rounds; i++)
+            progs = fight(progs, fightsPerProgram);
+
+            for (HillFighter fighter : progs)
             {
-                int n1 = random.nextInt(progs.size());
-                HillFighter p1 = progs.get(n1);
-                int n2;
+                logger.debug(" result: " + fighter.getFilename() + " scored " + fighter.getScore());
+            }
+        }
+        catch (CompilerException ex)
+        {
+            System.err.println(ex);
+            System.exit(1);
+        }
+        catch (FileNotFoundException ex)
+        {
+            System.err.println(ex);
+            System.exit(1);
+        }
+        catch (IOException ex)
+        {
+            System.err.println(ex);
+            System.exit(1);
+        }
+    }
+
+    public static List<HillFighter> fight(List<HillFighter> progs, int fightsPerProgram)
+            throws CompilerException
+    {
+        if (progs.size() < 2)
+        {
+            throw new IllegalArgumentException(
+                    "Not enough programs, " + progs.size() + " given but 2 required");
+        }
+
+        Random random = new Random();
+        for (HillFighter p1 : progs)
+        {
+            for (int i = 0; i < fightsPerProgram; i++)
+            {
+                HillFighter p2;
                 do
                 {
-                    n2 = random.nextInt(progs.size());
-                } while (n1 == n2);
-                HillFighter p2 = progs.get(n2);
+                    int n2 = random.nextInt(progs.size());
+                    p2 = progs.get(n2);
+                } while (p1 == p2);
 
                 BattleResult result = Battle.fight(p1.getCode(), p2.getCode(), 1000000);
                 switch (result.winner)
                 {
                     case 0:
-                        System.out.println("tied");
+                        logger.debug("tied");
                         p1.markTie();
                         p2.markTie();
                         break;
                     case 1:
-                        System.out.println(
+                        logger.debug(
                                 p1.getFilename() + " beats "
                                 + p2.getFilename() + " after "
                                 + result.rounds + " rounds");
@@ -73,7 +110,7 @@ public class Hill
                         p2.markLoss();
                         break;
                     case 2:
-                        System.out.println(
+                        logger.debug(
                                 p2.getFilename() + " beats "
                                 + p1.getFilename() + " after "
                                 + result.rounds + " rounds");
@@ -84,27 +121,18 @@ public class Hill
                         break;
                 }
             }
+        }
 
-            System.out.println("\nResults:");
-            for (HillFighter fighter : progs)
-            {
-                System.out.println(fighter.getFilename() + ": " + fighter.getScore());
-            }
-        }
-        catch (CompilerException ex)
+        Collections.sort(progs, new HillFighterScoreSort());
+        return progs;
+    }
+
+    private static class HillFighterScoreSort implements Comparator<HillFighter>
+    {
+        @Override
+        public int compare(HillFighter o1, HillFighter o2)
         {
-            System.out.println(ex);
-            System.exit(1);
-        }
-        catch (FileNotFoundException ex)
-        {
-            System.out.println(ex);
-            System.exit(1);
-        }
-        catch (IOException ex)
-        {
-            System.out.println(ex);
-            System.exit(1);
+            return o2.getScore() - o1.getScore();
         }
     }
 }
