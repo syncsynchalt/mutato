@@ -23,10 +23,14 @@ public class CompilerTest
         String code = ".+-><^vx";
         Compiler.translateProgram(mill, code, 0);
 
-        for (int i = 0; i < 8; ++i)
-        {
-            assertEquals(i, mill.get(i));
-        }
+        assertEquals(MutoCode.NOOP, mill.get(0));
+        assertEquals(MutoCode.INCR, mill.get(1));
+        assertEquals(MutoCode.DECR, mill.get(2));
+        assertEquals(MutoCode.NEXT, mill.get(3));
+        assertEquals(MutoCode.PREV, mill.get(4));
+        assertEquals(MutoCode.FFWD, mill.get(5));
+        assertEquals(MutoCode.RWND, mill.get(6));
+        assertEquals(MutoCode.DIE,  mill.get(7));
         assertEquals(0, mill.get(8));
     }
 
@@ -44,9 +48,9 @@ public class CompilerTest
         MutoMill mill = new MutoMillImpl(100);
         String code = "+-><";
         Compiler.translateProgram(mill, code, 99);
-        assertEquals(1, mill.get(99));
-        assertEquals(2, mill.get(0));
-        assertEquals(3, mill.get(1));
-        assertEquals(4, mill.get(2));
+        assertEquals(MutoCode.INCR, mill.get(99));
+        assertEquals(MutoCode.DECR, mill.get(0));
+        assertEquals(MutoCode.NEXT, mill.get(1));
+        assertEquals(MutoCode.PREV, mill.get(2));
     }
 }

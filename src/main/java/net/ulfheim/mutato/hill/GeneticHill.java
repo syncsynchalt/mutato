@@ -95,7 +95,7 @@ public class GeneticHill
             HillFighter f = orig.get(rank);
 
             File out = new File(subDir, String.format("%03d-%s-%d",
-                    rank, f.getFilename(), f.getGeneration()));
+                    rank+1, f.getFilename(), f.getGeneration()));
             FileUtils.write(out, f.getCode() + "\n", "UTF-8");
         }
         System.out.println("Wrote programs to " + subDir.getPath());

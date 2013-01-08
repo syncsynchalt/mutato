@@ -44,23 +44,23 @@ The following opcodes are understood by the muto machine:
 *   `. NOOP (0)`
     Performs no action.
 
-*   `+ INCR (1)`
-    Increment the current item in the muto's data mill.
+*   `^ FFWD (1)`
+    Multiply the current item in the muto's data mill by sixteen, and increment the data pointer by that value.
 
-*   `- DECR (2)`
-    Decrement the current item in the muto's data mill.
+*   `+ INCR (2)`
+    Increment the current item in the muto's data mill.
 
 *   `> NEXT (3)`
     Increment the data pointer in the muto's data mill.
 
-*   `< PREV (4)`
+*   `x DIE  (4) `
+    Forfeit the battle.
+
+*   `< PREV (5)`
     Decrement the data pointer in the muto's data mill.
 
-*   `^ FFWD (5)`
-    Multiply the current item in the muto's data mill by sixteen, and increment the data pointer by that value.
+*   `- DECR (6)`
+    Decrement the current item in the muto's data mill.
 
-*   `v RWND (6)`
+*   `v RWND (7)`
     Multiply the current item in the muto's data mill by sixteen, and decrement the data pointer by that value.
-
-*   `x DIE (7) `
-    Forfeit the battle.

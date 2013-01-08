@@ -39,8 +39,8 @@ public class Breeder
         int orig = MutoCode.valueOf(code.charAt(where));
         int newCode;
         do {
-            newCode = random.nextInt(MutoCode.DIE);
-        } while (newCode == orig);
+            newCode = random.nextInt(MutoCode.MAX);
+        } while (newCode == orig && newCode != MutoCode.DIE);
 
         return code.substring(0, where) + MutoCode.codeChar(newCode) + code.substring(where+1);
     }

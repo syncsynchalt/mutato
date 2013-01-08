@@ -57,7 +57,7 @@ public class MutoImpl implements Muto
         int curData;
         switch (c)
         {
-            case MutoCode.NOP:
+            case MutoCode.NOOP:
                 break;
             case MutoCode.INCR:
                 data.incr(dataPtr);

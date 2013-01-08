@@ -6,20 +6,22 @@ package net.ulfheim.mutato;
  */
 public final class MutoCode
 {
-    public static final int NOP  = 0;
-    public static final int INCR = 1;
-    public static final int DECR = 2;
+    public static final int NOOP = 0;
+    public static final int FFWD = 1;
+    public static final int INCR = 2;
     public static final int NEXT = 3;
-    public static final int PREV = 4;
-    public static final int FFWD = 5;
-    public static final int RWND = 6;
-    public static final int DIE  = 7;
+    public static final int DIE  = 4;
+    public static final int PREV = 5;
+    public static final int DECR = 6;
+    public static final int RWND = 7;
+
+    public static final int MAX  = 8;
 
     public static int valueOf(char c)
     {
         switch (c)
         {
-            case '.': return NOP;
+            case '.': return NOOP;
             case '+': return INCR;
             case '-': return DECR;
             case '>': return NEXT;
@@ -38,14 +40,14 @@ public final class MutoCode
     {
         switch (code)
         {
-            case 0: return '.';
-            case 1: return '+';
-            case 2: return '-';
-            case 3: return '>';
-            case 4: return '<';
-            case 5: return '^';
-            case 6: return 'v';
-            case 7: return 'x';
+            case NOOP: return '.';
+            case INCR: return '+';
+            case DECR: return '-';
+            case NEXT: return '>';
+            case PREV: return '<';
+            case FFWD: return '^';
+            case RWND: return 'v';
+            case DIE:  return 'x';
             default:
                 throw new IllegalArgumentException("Unrecognized mutocodepoint " + code);
         }
