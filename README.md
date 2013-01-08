@@ -14,7 +14,7 @@ Each muto is battling with an opposite muto with interlinked mills,
 so that one muto's code mill is the other's data mill.
 
 Each muto is attempting to get the other muto to execute a DIE
-instruction (0x7).
+instruction.
 
 mills
 -----
@@ -41,26 +41,30 @@ mutocode
 
 The following opcodes are understood by the muto machine:
 
-*   `. NOOP (0)`
-    Performs no action.
+*   `. NOOP`
+    Perform no action.
 
-*   `^ FFWD (1)`
-    Multiply the current item in the muto's data mill by sixteen, and increment the data pointer by that value.
-
-*   `+ INCR (2)`
+*   `+ INCR`
     Increment the current item in the muto's data mill.
 
-*   `> NEXT (3)`
-    Increment the data pointer in the muto's data mill.
-
-*   `x DIE  (4) `
-    Forfeit the battle.
-
-*   `< PREV (5)`
-    Decrement the data pointer in the muto's data mill.
-
-*   `- DECR (6)`
+*   `- DECR`
     Decrement the current item in the muto's data mill.
 
-*   `v RWND (7)`
-    Multiply the current item in the muto's data mill by sixteen, and decrement the data pointer by that value.
+*   `> NEXT`
+    Increment the data pointer in the muto's data mill.
+
+*   `< PREV`
+    Decrement the data pointer in the muto's data mill.
+
+*   `^ FFWD`
+    Increment the data pointer by current item times sixteenth of data mill size.
+
+*   `v RWND`
+    Decrement the data pointer by current item times sixteenth of data mill size.
+
+*   `x DIE`
+    Forfeit the battle.
+
+The numeric values of opcodes can be modified in `MutoCode.java`.
+Changing the numbers has a noticeable effect on the evolution of
+the programs.

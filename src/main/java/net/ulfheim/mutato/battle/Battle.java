@@ -71,8 +71,8 @@ public class Battle
     public static BattleResult fight(String code1, String code2, int rounds)
             throws CompilerException
     {
-        MutoMill mill1 = new MutoMillImpl(4096);
-        MutoMill mill2 = new MutoMillImpl(4096);
+        MutoMill mill1 = new MutoMillImpl(1024*1024);
+        MutoMill mill2 = new MutoMillImpl(1024*1024);
 
         Random rand = new Random();
         int offset1 = rand.nextInt(mill1.size());

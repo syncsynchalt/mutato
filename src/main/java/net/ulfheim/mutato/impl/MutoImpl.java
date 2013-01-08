@@ -17,6 +17,7 @@ public class MutoImpl implements Muto
     private final int codeSize;
     private final MutoMill data;
     private final int dataSize;
+    private final int sixteenth;
 
     private final int codeStart; // where in code mill does our code loop start
     private final int codeEnd;   // where in code mill does our code loop end
@@ -36,6 +37,7 @@ public class MutoImpl implements Muto
         this.codeSize = code.size();
         this.data = data;
         this.dataSize = data.size();
+        this.sixteenth = (dataSize/16 == 0 ? 1 : dataSize/16);
 
         this.codeStart = codeIndex;
         this.codePtr = codeIndex;
@@ -73,11 +75,11 @@ public class MutoImpl implements Muto
                 break;
             case MutoCode.FFWD:
                 curData = data.get(dataPtr);
-                modifyDataPtr(curData*16);
+                modifyDataPtr(curData*sixteenth);
                 break;
             case MutoCode.RWND:
                 curData = data.get(dataPtr);
-                modifyDataPtr(-curData*16);
+                modifyDataPtr(-curData*sixteenth);
                 break;
             case MutoCode.DIE:
                 return true;
