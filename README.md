@@ -5,6 +5,23 @@ A mashup of CoreWars, Brainfuck, and genetic algorithms.  The intent
 is to invent a simple language and discover emergent complexity via
 genetic algorithms.
 
+quickstart
+----------
+To run a hundred generations of twenty battles each, execute the
+following:
+
+    ./genehill programs 20 100
+
+This starts with the simple demo programs in `programs/` and evolves
+from there.
+
+In each generation, the top half scoring programs are preserved and
+bred into a new generation.
+
+The results of each generation are found in `results.{timestamp}/nn/`.
+The resulting programs are named in the format
+`{rank}-{original_program}-{generation}`.
+
 mutos
 -----
 
@@ -25,21 +42,21 @@ of 0-7.
 code mill
 ---------
 
-The muto's code is placed in a random location in the code mill.
-This code is executed in a loop.  The muto cannot modify their own
+Each muto's code is placed in a random location in its code mill.
+This code is executed in a loop.  The muto cannot modify its own
 code or escape the loop.
 
 data mill
 ---------
 
-The muto has access to a data mill which contains the enemy muto's
+Each muto has access to a data mill which contains the enemy muto's
 code somewhere within.  The muto can modify the data mill but has
 no way to inspect it.
 
 mutocode
 --------
 
-The following opcodes are understood by the muto machine:
+The following instructions are understood by the muto machine:
 
 *   `. NOOP`
     Perform no action.
@@ -65,6 +82,12 @@ The following opcodes are understood by the muto machine:
 *   `x DIE`
     Forfeit the battle.
 
-The numeric values of opcodes can be modified in `MutoCode.java`.
+The numeric values of instructions can be modified in `MutoCode.java`.
 Changing the numbers has a noticeable effect on the evolution of
 the programs.
+
+steps
+-----
+
+Each instruction runs in one step, and reaching the end of the code
+loop also takes one step.  Two battling mutos execute steps in turn.

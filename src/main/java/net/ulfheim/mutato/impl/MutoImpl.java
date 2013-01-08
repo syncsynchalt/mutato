@@ -55,6 +55,13 @@ public class MutoImpl implements Muto
     @Override
     public boolean step()
     {
+        // loop reset costs 1 step
+        if (codePtr == codeEnd)
+        {
+            codePtr = codeStart;
+            return false;
+        }
+
         int c = code.get(codePtr);
         int curData;
         switch (c)
@@ -107,8 +114,6 @@ public class MutoImpl implements Muto
         codePtr++;
         if (codePtr >= codeSize)
             codePtr -= codeSize;
-        if (codePtr == codeEnd)
-            codePtr = codeStart;
     }
 
     /**
