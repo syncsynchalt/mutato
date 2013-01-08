@@ -10,7 +10,7 @@ quickstart
 To run a hundred generations of twenty battles each, execute the
 following:
 
-    ./genehill programs 20 100
+    ./genehill programs/ 20 100
 
 This starts with the simple demo programs in `programs/` and evolves
 from there.
@@ -36,8 +36,8 @@ instruction.
 mills
 -----
 
-Mills are a set of 2^n addressable cells, each with a possible value
-of 0-7.
+Mills are a set of (typically) 2^n cells, each with a possible
+value of 0-7.
 
 code mill
 ---------
