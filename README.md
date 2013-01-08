@@ -90,4 +90,4 @@ steps
 -----
 
 Each instruction runs in one step, and reaching the end of the code
-loop also takes one step.  Two battling mutos execute steps in turn.
+loop also takes one step.  The two battling mutos execute steps in turn.
