@@ -13,7 +13,7 @@ public class Breeder
 
     public static String mutate(String code, String optionalCross)
     {
-        int type = random.nextInt(7);
+        int type = random.nextInt(8);
         switch (type)
         {
             case 0:
@@ -26,6 +26,7 @@ public class Breeder
             case 5:
                 return pointAdd(code);
             case 6:
+            case 7:
                 return crossCode(code, optionalCross);
             default:
                 throw new IllegalStateException("unexpected random result");
