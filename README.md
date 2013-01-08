@@ -82,6 +82,15 @@ The following instructions are understood by the muto machine:
 *   `x DIE`
     Forfeit the battle.
 
+In C pseudo-code they are implemented in the following way:
+
+*   `+` => `(*p)++`
+*   `-` => `(*p)--`
+*   `>` => `p++`
+*   `<` => `p--`
+*   `^` => `p += *p * (data.size / 16)`
+*   `v` => `p -= *p * (data.size / 16)`
+
 The numeric values of instructions can be modified in `MutoCode.java`.
 Changing the numbers has a noticeable effect on the evolution of
 the programs.
