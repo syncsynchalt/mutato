@@ -45,14 +45,14 @@ public class Hill
             for (String file : files)
             {
                 String code = net.ulfheim.mutato.Compiler.readProgram(dir + "/" + file);
-                progs.add(new HillFighter(code, file));
+                progs.add(new HillFighter(code, file, 0));
             }
 
             progs = fight(progs, fightsPerProgram);
 
             for (HillFighter fighter : progs)
             {
-                logger.debug(" result: " + fighter.getFilename() + " scored " + fighter.getScore());
+                System.out.println(" result: " + fighter.getFilename() + " scored " + fighter.getScore());
             }
         }
         catch (CompilerException ex)

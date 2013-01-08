@@ -11,11 +11,13 @@ package net.ulfheim.mutato.hill;
 public class HillFighter
 {
     private int score;
-    private String code;
-    private String file;
+    private final int generation;
+    private final String code;
+    private final String file;
 
-    public HillFighter(String code, String file)
+    public HillFighter(String code, String file, int generation)
     {
+        this.generation = generation;
         this.code = code;
         this.file = file;
     }
@@ -27,4 +29,5 @@ public class HillFighter
     public int getScore() { return score; }
     public String getCode() { return code; }
     public String getFilename() { return file; }
+    public int getGeneration() { return generation; }
 }

@@ -49,7 +49,7 @@ public class GeneticHill
                 for (String file : files)
                 {
                     String code = net.ulfheim.mutato.Compiler.readProgram(startDir + "/" + file);
-                    progs.add(new HillFighter(code, file));
+                    progs.add(new HillFighter(code, file, 0));
                 }
             }
 
@@ -94,17 +94,18 @@ public class GeneticHill
         {
             HillFighter f = orig.get(rank);
 
-            File out = new File(subDir, String.format("%03d-%s", rank, f.getFilename()));
+            File out = new File(subDir, String.format("%03d-%s-%d",
+                    rank, f.getFilename(), f.getGeneration()));
             FileUtils.write(out, f.getCode() + "\n", "UTF-8");
         }
-        logger.info("Wrote programs to " + subDir.getPath());
+        System.out.println("Wrote programs to " + subDir.getPath());
 
         // save top half of new gen
         List<HillFighter> newList = new ArrayList<HillFighter>();
         for (int rank = 0; rank < orig.size() / 2; rank++)
         {
             HillFighter f = orig.get(rank);
-            newList.add(new HillFighter(f.getCode(), f.getFilename()));
+            newList.add(new HillFighter(f.getCode(), f.getFilename(), f.getGeneration()));
         }
 
         // make second half of new gen via mutation
@@ -115,13 +116,7 @@ public class GeneticHill
             HillFighter fCross = orig.get(random.nextInt(orig.size()));
             String newCode = Breeder.mutate(f.getCode(), fCross.getCode());
 
-            String newFile = f.getFilename();
-            if (!newFile.endsWith("m"))
-                newFile = newFile + "-m";
-            else
-                newFile = newFile + "m";
-
-            newList.add(new HillFighter(newCode, newFile));
+            newList.add(new HillFighter(newCode, f.getFilename(), f.getGeneration()+1));
         }
 
         return newList;
