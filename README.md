@@ -20,7 +20,7 @@ bred into a new generation.
 
 The results of each generation are found in `results.{timestamp}/nn/`.
 The resulting programs are named in the format
-`{rank}-{original_program}-{generation}`.
+`{rank}-{original_program}-{mutation_count}`.
 
 mutos
 -----
