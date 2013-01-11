@@ -1,7 +1,7 @@
 mutato
 ======
 
-A mashup of CoreWars, Brainfuck, and genetic algorithms.  The intent
+A mashup of Core War, brainfuck, and genetic algorithms.  The intent
 is to invent a simple language and discover emergent complexity via
 genetic algorithms.
 
