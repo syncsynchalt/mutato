@@ -14,6 +14,9 @@ import net.ulfheim.mutato.exception.CompilerException;
 import net.ulfheim.mutato.mutator.Breeder;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
 
 /**
  *
@@ -23,21 +26,50 @@ public class GeneticHill
 {
     private static final Logger logger = Logger.getLogger(GeneticHill.class.getName());
 
+    @Option(name="-ticks", usage="number of fight ticks before tie declared (default:10000000)")
+    private Long ticks = 10000000L;
+
+    @Option(name="-millsize", usage="number of cells in code/data mills (default:65536)")
+    private Integer millSize = 65536;
+
+    @Option(name="-dir", usage="directory of programs to start the breeds (default:./programs)")
+    private String programDir = "./programs";
+
+    @Option(name="-fights", usage="number of fights per program ***")
+    private Integer fightsPerProgram;
+
+    @Option(name="-generations", usage="number of generations of hills to breed ***")
+    private Integer generations;
+
     public static void main(String[] args)
     {
-        if (args.length != 3)
+        new GeneticHill().doMain(args);
+    }
+
+    private void doMain(String[] args)
+    {
+        CmdLineParser parser = new CmdLineParser(this);
+        try
         {
-            System.err.println(
-                    "Usage: genetichill [start dir] [fights per program] [genetic rounds]");
-            System.exit(1);
+            parser.parseArgument(args);
+
+            if (fightsPerProgram == null)
+                throw new CmdLineException(parser, "Argument -fights is required");
+            if (generations == null)
+                throw new CmdLineException(parser, "Argument -generations is required");
+
+        } catch (CmdLineException e)
+        {
+            System.err.println(e.getMessage());
+            System.err.println("Usage: hill [args]");
+            parser.printUsage(System.err);
+            System.err.println();
+            System.exit(127);
         }
 
-        String startDir = args[0];
-        int fightsPerProgram = Integer.valueOf(args[1]);
-        int geneRounds = Integer.valueOf(args[2]);
         String resultsDir = "results." + System.currentTimeMillis()/1000;
 
-        File dirFile = new File(startDir);
+        File dirFile = new File(programDir);
         String[] files = dirFile.list();
         List<HillFighter> progs = new ArrayList<HillFighter>();
 
@@ -48,14 +80,21 @@ public class GeneticHill
             {
                 for (String file : files)
                 {
-                    String code = net.ulfheim.mutato.Compiler.readProgram(startDir + "/" + file);
+                    String code = net.ulfheim.mutato.Compiler.readProgram(programDir + "/" + file);
                     progs.add(new HillFighter(code, file, 0));
                 }
             }
 
-            for (int i = 0; i < geneRounds + 1; i++)
+            for (int i = 0; i < generations + 1; i++)
             {
-                progs = Hill.fight(progs, fightsPerProgram);
+                logger.info("starting generation " + i);
+                long startTime = System.currentTimeMillis();
+
+                progs = Hill.fight(progs, fightsPerProgram, ticks, millSize);
+
+                long endTime = System.currentTimeMillis();
+                long duration = (endTime - startTime)/1000;
+                logger.info("finished generation " + i + " in " + duration + " seconds, top score is " + progs.get(0).getScore());
 
                 for (HillFighter fighter : progs)
                 {
@@ -121,4 +160,5 @@ public class GeneticHill
 
         return newList;
     }
+
 }

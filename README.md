@@ -10,7 +10,7 @@ quickstart
 To run a hundred generations of twenty battles each, execute the
 following:
 
-    ./genehill programs/ 20 100
+    ./genehill -dir ./programs -fights 20 -generations 100
 
 This starts with the simple demo programs in `programs/` and evolves
 from there.
@@ -36,8 +36,10 @@ instruction.
 mills
 -----
 
-Mills are a set of (typically) 2^n cells, each with a possible
+Mills are a set of 65536 cells, each with a possible
 value of 0-7.
+
+Mill size can be changed with the -millsize flag.
 
 code mill
 ---------
@@ -95,8 +97,8 @@ The numeric values of instructions can be modified in `MutoCode.java`.
 Changing the numbers has a noticeable effect on the evolution of
 the programs.
 
-steps
+ticks
 -----
 
-Each instruction runs in one step, and reaching the end of the code
-loop also takes one step.  The two battling mutos execute steps in turn.
+Each instruction runs in one tick, and resetting the loop also takes one 
+tick.  The two battling mutos execute ticks in turn.

@@ -7,12 +7,12 @@ package net.ulfheim.mutato.battle;
 public class BattleResult
 {
     public final int winner;
-    public final int rounds;
+    public final long ticks;
 
-    public BattleResult(int winner, int rounds)
+    public BattleResult(int winner, long ticks)
     {
         this.winner = winner;
-        this.rounds = rounds;
+        this.ticks = ticks;
     }
 
 }

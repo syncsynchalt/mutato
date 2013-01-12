@@ -1,4 +1,8 @@
 #!/bin/sh
 
+if [ -n "$DEBUG" ]; then
+  DEBUG_OPTS="-Dlog4j.configuration=log4j-debug.properties"
+fi
+
 JAR=$(ls target/mutato-*-jar-with-dependencies.jar | tail -n 1)
-java -classpath "${JAR}" net.ulfheim.mutato.hill.GeneticHill "$@"
+java $DEBUG_OPTS -classpath "${JAR}" net.ulfheim.mutato.hill.GeneticHill "$@"
