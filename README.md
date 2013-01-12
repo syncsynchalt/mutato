@@ -7,6 +7,9 @@ genetic algorithms.
 
 quickstart
 ----------
+Build project with `mvn package` or grab pre-built package at
+http://www.ulfheim.net/files/mutato/mutato-latest.zip.
+
 To run a hundred generations of twenty battles each, execute the
 following:
 
