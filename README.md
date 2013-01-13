@@ -42,7 +42,7 @@ mills
 Mills are a set of 65536 cells, each with a possible
 value of 0-7.
 
-Mill size can be changed with the -millsize flag.
+Mill size can be changed with the `-millsize` flag.
 
 code mill
 ---------
@@ -103,5 +103,7 @@ the programs.
 ticks
 -----
 
-Each instruction runs in one tick, and resetting the loop also takes one 
-tick.  The two battling mutos execute ticks in turn.
+Each instruction runs in one tick.  The two battling mutos execute ticks in turn.
+
+Restarting the code loop takes two ticks, this can be modified with the
+`-loopticks` flag.

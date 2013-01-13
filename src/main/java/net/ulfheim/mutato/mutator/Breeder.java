@@ -35,26 +35,35 @@ public class Breeder
 
     private static String pointChange(String code)
     {
+        if (code.isEmpty())
+            return "";
+
         int where = random.nextInt(code.length());
         int orig = MutoCode.valueOf(code.charAt(where));
         int newCode;
         do {
             newCode = random.nextInt(MutoCode.MAX);
-        } while (newCode == orig && newCode != MutoCode.DIE);
+        } while (newCode == MutoCode.DIE || newCode == orig);
 
         return code.substring(0, where) + MutoCode.codeChar(newCode) + code.substring(where+1);
     }
 
     private static String pointRemoval(String code)
     {
+        if (code.isEmpty())
+            return "";
+
         int where = random.nextInt(code.length());
         return code.substring(0, where) + code.substring(where+1);
     }
 
     private static String pointAdd(String code)
     {
-        int where = random.nextInt(code.length());
-        int newCode = random.nextInt(MutoCode.DIE);
+        int where = code.length() == 0 ? 0 : random.nextInt(code.length()+1);
+        int newCode;
+        do {
+            newCode = random.nextInt(MutoCode.MAX);
+        } while (newCode == MutoCode.DIE);
 
         return code.substring(0, where) + MutoCode.codeChar(newCode) + code.substring(where);
     }

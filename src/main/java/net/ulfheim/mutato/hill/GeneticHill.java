@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2013 PAX8
- */
-
 package net.ulfheim.mutato.hill;
 
 import java.io.File;
@@ -31,6 +27,9 @@ public class GeneticHill
 
     @Option(name="-millsize", usage="number of cells in code/data mills (default:65536)")
     private Integer millSize = 65536;
+
+    @Option(name="-loopticks", usage="number of ticks to restart loop (default:2)")
+    private Integer loopTicks = 2;
 
     @Option(name="-dir", usage="directory of programs to start the breeds (default:./programs)")
     private String programDir = "./programs";
@@ -66,6 +65,8 @@ public class GeneticHill
             System.err.println();
             System.exit(127);
         }
+        System.setProperty("muto.loopticks", loopTicks.toString());
+        System.setProperty("muto.millsize", millSize.toString());
 
         String resultsDir = "results." + System.currentTimeMillis()/1000;
 
@@ -90,7 +91,7 @@ public class GeneticHill
                 logger.info("starting generation " + i);
                 long startTime = System.currentTimeMillis();
 
-                progs = Hill.fight(progs, fightsPerProgram, ticks, millSize);
+                progs = Hill.fight(progs, fightsPerProgram, ticks);
 
                 long endTime = System.currentTimeMillis();
                 long duration = (endTime - startTime)/1000;

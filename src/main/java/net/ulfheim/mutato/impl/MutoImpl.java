@@ -25,13 +25,16 @@ public class MutoImpl implements Muto
     private int codePtr;
     private int dataPtr;
 
+    private final int loopTicks;
+    private int waitTicks;
+
     /**
      * @param code mill from which we'll read our code
      * @param data mill in which we can change data
      * @param codeIndex where in code mill our code loop starts
      * @param codeLength length of code loop from codeIndex
      */
-    public MutoImpl(MutoMill code, MutoMill data, int codeIndex, int codeLength)
+    public MutoImpl(MutoMill code, MutoMill data, int codeIndex, int codeLength, int loopTicks)
     {
         this.code = code;
         this.codeSize = code.size();
@@ -46,6 +49,8 @@ public class MutoImpl implements Muto
         if (end > codeSize)
             end -= codeSize;
         this.codeEnd = end;
+
+        this.loopTicks = loopTicks;
     }
 
     /**
@@ -55,10 +60,9 @@ public class MutoImpl implements Muto
     @Override
     public boolean step()
     {
-        // loop reset costs 1 step
-        if (codePtr == codeEnd)
+        if (waitTicks > 0)
         {
-            codePtr = codeStart;
+            waitTicks--;
             return false;
         }
 
@@ -114,6 +118,10 @@ public class MutoImpl implements Muto
         codePtr++;
         if (codePtr >= codeSize)
             codePtr -= codeSize;
+        if (codePtr == codeEnd) {
+            codePtr = codeStart;
+            waitTicks = loopTicks;
+        }
     }
 
     /**

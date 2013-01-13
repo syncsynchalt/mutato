@@ -21,11 +21,14 @@ import org.kohsuke.args4j.Option;
  * Muto Battle!
  * @author mdriscoll
  */
-public class Battle 
+public class Battle
 {
-    public static BattleResult fight(String code1, String code2, long ticks, int millSize)
+    public static BattleResult fight(String code1, String code2, long ticks)
             throws CompilerException
     {
+        int millSize = Integer.valueOf(System.getProperty("muto.millsize"));
+        int loopTicks = Integer.valueOf(System.getProperty("muto.loopticks"));
+
         MutoMill mill1 = new MutoMillImpl(millSize);
         MutoMill mill2 = new MutoMillImpl(millSize);
 
@@ -36,8 +39,8 @@ public class Battle
         Compiler.translateProgram(mill1, code1, offset1);
         Compiler.translateProgram(mill2, code2, offset2);
 
-        Muto muto1 = new MutoImpl(mill1, mill2, offset1, code1.length());
-        Muto muto2 = new MutoImpl(mill2, mill1, offset2, code2.length());
+        Muto muto1 = new MutoImpl(mill1, mill2, offset1, code1.length(), loopTicks);
+        Muto muto2 = new MutoImpl(mill2, mill1, offset2, code2.length(), loopTicks);
 
         return fight(muto1, muto2, ticks);
     }
@@ -76,6 +79,9 @@ public class Battle
     @Option(name="-millsize", usage="number of cells in code/data mills (default:65536)")
     private Integer millSize = 65536;
 
+    @Option(name="-loopticks", usage="number of ticks to restart loop (default:2)")
+    private Integer loopTicks = 2;
+
     // receives other command line parameters than options
     @Argument
     private List<String> arguments = new ArrayList<String>();
@@ -102,6 +108,8 @@ public class Battle
             System.err.println();
             System.exit(127);
         }
+        System.setProperty("muto.loopticks", loopTicks.toString());
+        System.setProperty("muto.millsize", millSize.toString());
 
         try
         {
@@ -110,7 +118,7 @@ public class Battle
             String code1 = Compiler.readProgram(prog1);
             String code2 = Compiler.readProgram(prog2);
 
-            BattleResult result = fight(code1, code2, ticks, millSize);
+            BattleResult result = fight(code1, code2, ticks);
             switch (result.winner)
             {
                 case 1:

@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2013 PAX8
- */
-
 package net.ulfheim.mutato.hill;
 
 /**

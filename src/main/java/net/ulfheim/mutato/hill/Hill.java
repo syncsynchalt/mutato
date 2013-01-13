@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2013 PAX8
- */
-
 package net.ulfheim.mutato.hill;
 
 import java.io.File;
@@ -26,7 +22,8 @@ import org.kohsuke.args4j.Option;
  */
 public class Hill
 {
-    public static List<HillFighter> fight(List<HillFighter> progs, int fightsPerProgram, long ticks, int millSize)
+    public static List<HillFighter> fight(
+            List<HillFighter> progs, int fightsPerProgram, long ticks)
             throws CompilerException
     {
         if (progs.size() < 2)
@@ -47,7 +44,7 @@ public class Hill
                     p2 = progs.get(n2);
                 } while (p1 == p2);
 
-                BattleResult result = Battle.fight(p1.getCode(), p2.getCode(), ticks, millSize);
+                BattleResult result = Battle.fight(p1.getCode(), p2.getCode(), ticks);
                 switch (result.winner)
                 {
                     case 0:
@@ -100,6 +97,9 @@ public class Hill
     @Option(name="-millsize", usage="number of cells in code/data mills (default:65536)")
     private Integer millSize = 65536;
 
+    @Option(name="-loopticks", usage="number of ticks to restart loop (default:2)")
+    private Integer loopTicks = 2;
+
     @Option(name="-dir", usage="directory of programs to use on hill (default:./programs)")
     private String programDir = "./programs";
 
@@ -129,6 +129,8 @@ public class Hill
             System.err.println();
             System.exit(127);
         }
+        System.setProperty("muto.loopticks", loopTicks.toString());
+        System.setProperty("muto.millsize", millSize.toString());
 
         File dirFile = new File(programDir);
         String[] files = dirFile.list();
@@ -142,7 +144,7 @@ public class Hill
                 progs.add(new HillFighter(code, file, 0));
             }
 
-            progs = fight(progs, fightsPerProgram, ticks, millSize);
+            progs = fight(progs, fightsPerProgram, ticks);
 
             for (HillFighter fighter : progs)
             {
