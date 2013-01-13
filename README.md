@@ -13,7 +13,7 @@ http://www.ulfheim.net/files/mutato/mutato-latest.zip.
 To run a hundred generations of twenty battles each, execute the
 following:
 
-    ./genehill -dir ./programs -fights 20 -generations 100
+    ./genehill -dir ./programs -generations 100
 
 This starts with the simple demo programs in `programs/` and evolves
 from there.
