@@ -22,7 +22,7 @@ import org.kohsuke.args4j.Option;
  */
 public class Hill
 {
-    public static List<HillFighter> fight(
+    public static List<HillFighter> rankHill(
             List<HillFighter> progs, int fightsPerProgram, long ticks)
             throws CompilerException
     {
@@ -33,43 +33,42 @@ public class Hill
         }
 
         Random random = new Random();
-        for (HillFighter p1 : progs)
+        for (int i = 0; i < progs.size(); i++)
         {
-            for (int i = 0; i < fightsPerProgram; i++)
+            HillFighter p1 = progs.get(i);
+            for (int j = i+1; j < progs.size(); j++)
             {
-                HillFighter p2;
-                do
-                {
-                    int n2 = random.nextInt(progs.size());
-                    p2 = progs.get(n2);
-                } while (p1 == p2);
+                HillFighter p2 = progs.get(j);
 
-                BattleResult result = Battle.fight(p1.getCode(), p2.getCode(), ticks);
-                switch (result.winner)
+                for (int fight = 0; fight < fightsPerProgram; fight++)
                 {
-                    case 0:
-                        logger.debug("tied");
-                        p1.markTie();
-                        p2.markTie();
-                        break;
-                    case 1:
-                        logger.debug(
-                                p1.getFilename() + " beats "
-                                + p2.getFilename() + " after "
-                                + result.ticks + " ticks");
-                        p1.markWin();
-                        p2.markLoss();
-                        break;
-                    case 2:
-                        logger.debug(
-                                p2.getFilename() + " beats "
-                                + p1.getFilename() + " after "
-                                + result.ticks + " ticks");
-                        p1.markLoss();
-                        p2.markWin();
-                        break;
-                    default:
-                        break;
+                    BattleResult result = Battle.fight(p1.getCode(), p2.getCode(), ticks);
+                    switch (result.winner)
+                    {
+                        case 0:
+                            logger.debug("tied");
+                            p1.markTie();
+                            p2.markTie();
+                            break;
+                        case 1:
+                            logger.debug(
+                                    p1.getFilename() + " beats "
+                                    + p2.getFilename() + " after "
+                                    + result.ticks + " ticks");
+                            p1.markWin();
+                            p2.markLoss();
+                            break;
+                        case 2:
+                            logger.debug(
+                                    p2.getFilename() + " beats "
+                                    + p1.getFilename() + " after "
+                                    + result.ticks + " ticks");
+                            p1.markLoss();
+                            p2.markWin();
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
@@ -103,8 +102,8 @@ public class Hill
     @Option(name="-dir", usage="directory of programs to use on hill (default:./programs)")
     private String programDir = "./programs";
 
-    @Option(name="-fights", usage="number of fights per program ***")
-    private Integer fightsPerProgram;
+    @Option(name="-fights", usage="number of fights per program cross (default:1)")
+    private Integer fightsPerCross = 1;
 
     public static void main(String[] args)
     {
@@ -117,9 +116,6 @@ public class Hill
         try
         {
             parser.parseArgument(args);
-
-            if (fightsPerProgram == null)
-                throw new CmdLineException(parser, "Argument -fights is required");
 
         } catch (CmdLineException e)
         {
@@ -144,7 +140,7 @@ public class Hill
                 progs.add(new HillFighter(code, file, 0));
             }
 
-            progs = fight(progs, fightsPerProgram, ticks);
+            progs = rankHill(progs, fightsPerCross, ticks);
 
             for (HillFighter fighter : progs)
             {

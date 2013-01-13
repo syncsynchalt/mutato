@@ -34,11 +34,14 @@ public class GeneticHill
     @Option(name="-dir", usage="directory of programs to start the breeds (default:./programs)")
     private String programDir = "./programs";
 
-    @Option(name="-fights", usage="number of fights per program ***")
-    private Integer fightsPerProgram;
+    @Option(name="-fights", usage="number of fights per program cross (default:1)")
+    private Integer fightsPerCross = 1;
 
     @Option(name="-generations", usage="number of generations of hills to breed ***")
     private Integer generations;
+
+    @Option(name="-minprograms", usage="minimum number of programs in hill (default:50)")
+    private Integer minimumProgs = 50;
 
     public static void main(String[] args)
     {
@@ -52,8 +55,6 @@ public class GeneticHill
         {
             parser.parseArgument(args);
 
-            if (fightsPerProgram == null)
-                throw new CmdLineException(parser, "Argument -fights is required");
             if (generations == null)
                 throw new CmdLineException(parser, "Argument -generations is required");
 
@@ -76,22 +77,33 @@ public class GeneticHill
 
         try
         {
-            // pad out to at least 50 programs
-            while (progs.size() < 50)
+            for (String file : files)
+            {
+                String code = net.ulfheim.mutato.Compiler.readProgram(programDir + "/" + file);
+                progs.add(new HillFighter(code, file, 0));
+            }
+
+            // pad out to at least minimumProgs programs
+            int startSize = progs.size();
+            while (progs.size() < minimumProgs)
             {
                 for (String file : files)
                 {
                     String code = net.ulfheim.mutato.Compiler.readProgram(programDir + "/" + file);
                     progs.add(new HillFighter(code, file, 0));
+                    if (progs.size() >= minimumProgs)
+                        break;
                 }
             }
+            if (progs.size() != startSize)
+                logger.info("Copied program list to increase from " + startSize + " to " + progs.size());
 
             for (int i = 0; i < generations + 1; i++)
             {
                 logger.info("starting generation " + i);
                 long startTime = System.currentTimeMillis();
 
-                progs = Hill.fight(progs, fightsPerProgram, ticks);
+                progs = Hill.rankHill(progs, fightsPerCross, ticks);
 
                 long endTime = System.currentTimeMillis();
                 long duration = (endTime - startTime)/1000;
