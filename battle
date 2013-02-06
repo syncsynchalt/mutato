@@ -4,5 +4,5 @@ if [ -n "$DEBUG" ]; then
   DEBUG_OPTS="-Dlog4j.configuration=log4j-debug.properties"
 fi
 
-JAR=$(ls target/mutato-*-jar-with-dependencies.jar | tail -n 1)
+JAR=$(ls target/mutato-*.jar | tail -n 1)
 java $DEBUG_OPTS -classpath "${JAR}" net.ulfheim.mutato.battle.Battle "$@"

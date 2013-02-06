@@ -2,3 +2,5 @@ nbactions.xml
 target/
 results.*/
 nb-*
+.idea/
+mutato.iml
